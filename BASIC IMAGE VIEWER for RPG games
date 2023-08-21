@@ -1,0 +1,58 @@
+import os
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image, ImageTk
+
+class ImageViewerApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Image Viewer App")
+
+        self.image_label = tk.Label(root)
+        self.image_label.pack()
+
+        self.prev_button = tk.Button(root, text="Previous", command=self.show_previous_image)
+        self.prev_button.pack(side=tk.LEFT, padx=10)
+
+        self.next_button = tk.Button(root, text="Next", command=self.show_next_image)
+        self.next_button.pack(side=tk.RIGHT, padx=10)
+
+        self.folder_button = tk.Button(root, text="Choose Folder", command=self.choose_folder)
+        self.folder_button.pack(pady=10)
+
+        self.image_paths = []
+        self.current_image_index = 0
+
+    def choose_folder(self):
+        folder_path = filedialog.askdirectory()
+        if folder_path:
+            self.image_paths = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
+            if self.image_paths:
+                self.current_image_index = 0
+                self.show_image()
+
+    def show_image(self):
+        if self.image_paths:
+            image_path = self.image_paths[self.current_image_index]
+            image = Image.open(image_path)
+            image = image.resize((400, 400), Image.ANTIALIAS)
+            self.photo = ImageTk.PhotoImage(image=image)
+            self.image_label.config(image=self.photo)
+
+    def show_previous_image(self):
+        if self.image_paths:
+            self.current_image_index = (self.current_image_index - 1) % len(self.image_paths)
+            self.show_image()
+
+    def show_next_image(self):
+        if self.image_paths:
+            self.current_image_index = (self.current_image_index + 1) % len(self.image_paths)
+            self.show_image()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ImageViewerApp(root)
+    root.mainloop()
+
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
