@@ -1,0 +1,72 @@
+import tkinter as tk
+
+# Create the main window
+root = tk.Tk()
+root.title("RPG Game")
+
+# Initialize game variables
+player_health = 100
+player_gold = 0
+
+# Function to update the game text
+def update_text(text):
+    text_display.config(state=tk.NORMAL)
+    text_display.insert(tk.END, text + "\n")
+    text_display.see(tk.END)
+    text_display.config(state=tk.DISABLED)
+
+# Function for the first choice
+def choice1():
+    global player_health, player_gold
+    player_health -= 10
+    player_gold += 10
+    update_text("You chose Choice 1. Health: -10, Gold: +10")
+    check_game_over()
+
+# Function for the second choice
+def choice2():
+    global player_health, player_gold
+    player_health += 20
+    player_gold -= 5
+    update_text("You chose Choice 2. Health: +20, Gold: -5")
+    check_game_over()
+
+# Function for the third choice
+def choice3():
+    global player_health, player_gold
+    player_health -= 5
+    player_gold += 5
+    update_text("You chose Choice 3. Health: -5, Gold: +5")
+    check_game_over()
+
+# Function to check if the game is over
+def check_game_over():
+    if player_health <= 0:
+        update_text("Game Over. Your health has reached 0.")
+        choice_button1.config(state=tk.DISABLED)
+        choice_button2.config(state=tk.DISABLED)
+        choice_button3.config(state=tk.DISABLED)
+    else:
+        update_text(f"Health: {player_health}, Gold: {player_gold}")
+
+# Create and configure the text display
+text_display = tk.Text(root, height=10, width=50)
+text_display.pack()
+text_display.config(state=tk.DISABLED)
+
+# Create and configure choice buttons
+choice_button1 = tk.Button(root, text="Choice 1", command=choice1)
+choice_button1.pack()
+choice_button2 = tk.Button(root, text="Choice 2", command=choice2)
+choice_button2.pack()
+choice_button3 = tk.Button(root, text="Choice 3", command=choice3)
+choice_button3.pack()
+
+# Initial game message
+update_text("Welcome to the RPG Game. Choose your destiny!")
+
+# Start the game
+root.mainloop()
+
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
